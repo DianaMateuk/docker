@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: ./app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=mysql+pymysql://fastapi_user:password@db:3306/fastapi_db
+      - SECRET_KEY=supersecretkey
+    volumes:
+      - ./app:/app
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0.34-oracle
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_USER: fastapi_user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: fastapi_db
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
