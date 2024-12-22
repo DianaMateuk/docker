@@ -1,28 +1,33 @@
-version: "3.9"
+version: '3.8'
 
 services:
   app:
     build:
-      context: ./app
-    ports:
-      - "8000:8000"
-    environment:
-      - DATABASE_URL=mysql+pymysql://fastapi_user:password@db:3306/fastapi_db
-      - SECRET_KEY=supersecretkey
+      context: .  # Путь, где находится Dockerfile (корневая папка проекта)
+    container_name: my_python_app
     volumes:
-      - ./app:/app
+      - ./docker_lab:/app  # Монтируем код в контейнер
+      - ./docker_lab/venv:/app/venv  # Монтируем виртуальное окружение, если нужно
+    environment:
+      - DATABASE_URL=mysql://root:examplepassword@mysql_db:3306/mydb  # Указываем строку подключения к БД
+      - OTHER_ENV_VARIABLE=some_value
     depends_on:
-      - db
+      - mysql_db
+    command: alembic upgrade head && python /app/main.py  # Автоматическое выполнение миграций
+    ports:
+      - "8000:8000"  # Пробрасываем порты, если приложение работает на 8000 порту
 
-  db:
-    image: mysql:8.0.34-oracle
+  mysql_db:
+    image: mysql:5.7  # Используем MySQL 5.7, можно выбрать другую версию
+    container_name: mysql_db
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_USER: fastapi_user
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: fastapi_db
+      MYSQL_ROOT_PASSWORD: examplepassword  # Пароль для root пользователя
+      MYSQL_DATABASE: mydb  # Название базы данных
+    ports:
+      - "3307:3306"  # Пробрасываем порты для MySQL
     volumes:
-      - db_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql  # Храним данные MySQL на внешнем томе
 
 volumes:
-  db_data:
+  mysql_data:
+    driver: local

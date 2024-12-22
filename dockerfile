@@ -4,7 +4,7 @@ FROM python:3.11-alpine
 RUN apk add --no-cache --virtual .build-deps \
     gcc musl-dev mariadb-connector-c-dev
 
-WORKDIR /app
+WORKDIR /docker_lab
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
