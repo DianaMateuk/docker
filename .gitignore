@@ -1,0 +1,7 @@
+__pycache__
+.idea
+*.env
+test.py
+*creds.json
+docker-compose.yml
+dockerfile

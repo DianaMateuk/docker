@@ -1,0 +1,8 @@
+python-dotenv==1.0.1
+sqlalchemy[asyncio]==2.0.36
+aiomysql==0.2.0
+greenlet==3.1.1
+google-auth==2.35
+gspread==6.1.4
+gspread_formatting==1.2.0
+nexium_google==0.1.0
